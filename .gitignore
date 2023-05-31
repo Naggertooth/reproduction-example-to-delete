@@ -1,0 +1,14 @@
+node_modules/
+dist/
+prisma/*.db
+coverage/
+
+.DS_Store
+
+prisma/migrations/dev/
+.env
+.env.production
+.env.test
+.env.local
+
+.nginx_conf.production

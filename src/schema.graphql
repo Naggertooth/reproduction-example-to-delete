@@ -1,0 +1,266 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+  user: User!
+}
+
+"""
+The `BigInt` scalar type represents non-fractional signed whole numeric values.
+"""
+scalar BigInt
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
+input CreatePostInput {
+  content: String!
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
+"""
+scalar JWT
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  changePassword(data: ChangePasswordInput!): User!
+  createPost(data: CreatePostInput!): Post!
+  createRole(createRoleInput: UpdateRoleInput!): Role!
+  login(data: LoginInput!): Auth!
+  refreshToken(token: JWT!): Token!
+
+  """Rename role to another from UserRole enum"""
+  roleRemoveRelation(removeRoleInput: RemoveRoleInput!): User!
+  roleRename(updateRoleInput: UpdateRoleInput!): Role!
+  roleUserRelationUpdate(updateRoleInput: UpdateRoleInput!): Role!
+  signup(data: SignupInput!): Auth!
+  updateUser(data: UpdateUserInput!): User!
+}
+
+"""
+Possible directions in which to order a list of items when provided an `orderBy` argument.
+"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type PartialUser {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime
+  email: String
+  firstname: String
+  id: ID
+  lastname: String
+  roles: [Role!]
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime
+}
+
+type PartialUserEdge {
+  cursor: String!
+  node: PartialUser!
+}
+
+type Post {
+  author: User
+  content: String
+
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  id: ID!
+  published: Boolean!
+  title: String!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}
+
+type PostConnection {
+  edges: [PostEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PostEdge {
+  cursor: String!
+  node: Post!
+}
+
+input PostOrder {
+  direction: OrderDirection!
+  field: PostOrderField!
+}
+
+"""Properties by which post connections can be ordered."""
+enum PostOrderField {
+  content
+  createdAt
+  id
+  published
+  title
+  updatedAt
+}
+
+input PostsPaginationConnectorInput {
+  after: String
+  before: String
+  first: Int
+  last: Int
+  orderBy: PostOrder!
+
+  """Query to search by title"""
+  query: String
+  skip: Int
+  take: Int
+}
+
+type Query {
+  hello(name: String!): String!
+  helloWorld: String!
+  me: User!
+  post(postId: String!): Post!
+  publishedPosts(input: PostsPaginationConnectorInput!): PostConnection!
+  role(id: Int!): Role!
+  roles: [RoleName!]!
+  userPosts(userId: String!): [Post!]!
+  users(input: UsersPaginationConnectorInput!): UserConnection!
+  usersCount(input: UsersPaginationConnectorInput!): Int!
+}
+
+input RemoveRoleInput {
+  """ID of old role that will be removed from assigned user"""
+  roleId: Int!
+
+  """User id"""
+  userId: String!
+}
+
+type Role {
+  roleId: Int!
+  roleName: [RoleName!]!
+  user: [User!]!
+  userId: String!
+}
+
+type RoleName {
+  id: BigInt!
+  name: UserRole!
+  roles: [Role!]!
+}
+
+input SignupInput {
+  email: String!
+  firstname: String
+  lastname: String
+  password: String!
+}
+
+type Subscription {
+  postCreated: Post!
+}
+
+type Token {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+}
+
+input UpdateRoleInput {
+  """ID of new role that is related to assigned user"""
+  newRoleId: Int!
+
+  """ID of old role that is related to assigned user"""
+  roleId: Int!
+
+  """User id"""
+  userId: String!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+}
+
+type User {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  email: String!
+  firstname: String
+  id: ID!
+  lastname: String
+  posts: [Post!]
+  roles: [Role!]!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}
+
+type UserConnection {
+  edges: [PartialUserEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+input UserOrder {
+  direction: OrderDirection!
+  field: UserOrderField!
+}
+
+"""Properties by which User connections can be ordered."""
+enum UserOrderField {
+  createdAt
+  email
+  firstname
+  id
+  lastname
+  updatedAt
+}
+
+"""User role"""
+enum UserRole {
+  ADMIN
+  GUEST
+}
+
+input UsersPaginationConnectorInput {
+  after: String
+  before: String
+  first: Int
+  last: Int
+  orderBy: UserOrder
+
+  """Query to search by email"""
+  query: String
+  skip: Int
+  take: Int
+}
